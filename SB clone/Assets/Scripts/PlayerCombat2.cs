@@ -33,7 +33,7 @@ public class PlayerCombat2 : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.F))
         {
-            attack();
+            StartCoroutine(attack());
         }
         if (attacking)
         {
@@ -47,12 +47,17 @@ public class PlayerCombat2 : MonoBehaviour
             }
         }
     }
-    void attack()
+    IEnumerator attack()
     {
         //Play attack animation
         attacking = true;
+         
         attackArea.SetActive(true);
+        attackArea.GetComponent<Collider2D>().enabled = false;
+        
         animator.SetTrigger("Attack1");
+        yield return new WaitForSeconds(0.3f);
+        attackArea.GetComponent<Collider2D>().enabled = true;
         //Detect enemies in range of attack
 
         Invoke("damage", 0.10f);

@@ -101,8 +101,15 @@ public class Player2Movement : MonoBehaviour
             }
             KBCounter2 -= Time.deltaTime;
         }
-        if (isJumping)
+        if (!isGrounded && isJumping)
         {
+            rb.velocity = Vector2.zero;
+            rb.AddForce(new Vector2(0f, 2 * jumpForce));
+            jumpCount--;
+        }
+        else if (isJumping)
+        {
+            rb.velocity = Vector2.zero;
             rb.AddForce(new Vector2(0f, jumpForce));
             jumpCount--;
         }

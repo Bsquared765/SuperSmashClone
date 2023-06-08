@@ -7,6 +7,10 @@ public class PlayerMovement : MonoBehaviour
 {
     
     private Rigidbody2D rb;
+
+    public StageScript stage;
+
+    public int stocks = 3;
     
     private bool facingRight = true;
     private bool isJumping = false;
@@ -75,6 +79,10 @@ public class PlayerMovement : MonoBehaviour
 
         Move();
         player1PercentText.text = (percent).ToString() + "%";
+        if (stocks <= 0)
+        {
+            //game();
+        }
     }
 
     private void Move()
@@ -104,12 +112,13 @@ public class PlayerMovement : MonoBehaviour
             }
             else
             {
-                Physics2D.gravity = new Vector2(0, 18f);
-                rb.AddForce(new Vector2(0f, jumpForce * 1.5f));
+                rb.velocity = Vector2.zero;
+                //Physics2D.gravity = new Vector2(0, 18f);
+                rb.AddForce(new Vector2(0f, jumpForce * 2f));
                 
                 jumpCount--;
                 //StartCoroutine(ExampleCoroutine());
-                Physics2D.gravity = new Vector2(0, -9f);
+                
             }
         }
         isJumping = false;
@@ -177,5 +186,24 @@ public class PlayerMovement : MonoBehaviour
         
     }
 
-    
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        
+        
+        if (collision.gameObject.tag == "BlastZone")
+        {
+            if (stocks > 1)
+            {
+                transform.position = new Vector2(0, 4);
+                percent = 0;
+                stocks--;
+            }
+            else
+            {
+                stage.game = true;
+            }
+                
+        }
+    }
+
 }
